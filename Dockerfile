@@ -1,8 +1,9 @@
 FROM node:12
+ENV NODE_ENV=production
 
 ARG RCON_WEB_ADMIN_VERSION=0.14.1
 
-ADD https://github.com/rcon-web-admin/rcon-web-admin/archive/${RCON_WEB_ADMIN_VERSION}.tar.gz /tmp/rcon-web-admin.tgz
+ADD https://github.com/WaveringAna/rcon-web-admin/archive/${RCON_WEB_ADMIN_VERSION}.tar.gz /tmp/rcon-web-admin.tgz
 
 RUN tar -C /opt -xf /tmp/rcon-web-admin.tgz && \
     rm /tmp/rcon-web-admin.tgz && \
@@ -10,13 +11,11 @@ RUN tar -C /opt -xf /tmp/rcon-web-admin.tgz && \
 
 WORKDIR /opt/rcon-web-admin
 
-RUN npm install && \
+RUN npm install --production && \
     node src/main.js install-core-widgets && \
     chmod 0755 -R startscripts *
 
-# 4326: web UI
-# 4327: websocket
-EXPOSE 4326 4327
+EXPOSE 4326
 
 VOLUME ["/opt/rcon-web-admin/db"]
 
