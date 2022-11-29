@@ -1,12 +1,13 @@
 FROM node:12
 
-ARG RCON_WEB_ADMIN_VERSION=0.14.1
+ARG RCON_WEB_ADMIN_VERSION=0.14.4
 
-ADD https://github.com/rcon-web-admin/rcon-web-admin/archive/${RCON_WEB_ADMIN_VERSION}.tar.gz /tmp/rcon-web-admin.tgz
+ADD https://github.com/Emilgardis/rcon-web-admin/archive/refs/tags/v${RCON_WEB_ADMIN_VERSION}.tar.gz /tmp/rcon-web-admin.tgz
+
 
 RUN tar -C /opt -xf /tmp/rcon-web-admin.tgz && \
     rm /tmp/rcon-web-admin.tgz && \
-    ln -s /opt/rcon-web-admin-${RCON_WEB_ADMIN_VERSION} /opt/rcon-web-admin
+    ln -s /opt/RCON-Web-Admin-${RCON_WEB_ADMIN_VERSION} /opt/rcon-web-admin
 
 WORKDIR /opt/rcon-web-admin
 
@@ -14,9 +15,7 @@ RUN npm install && \
     node src/main.js install-core-widgets && \
     chmod 0755 -R startscripts *
 
-# 4326: web UI
-# 4327: websocket
-EXPOSE 4326 4327
+EXPOSE 4326
 
 VOLUME ["/opt/rcon-web-admin/db"]
 
